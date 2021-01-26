@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.kyc</groupId>
 	<artifactId>kyc-batchs</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>kyc-batchs</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -19,10 +19,12 @@
 	</properties>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
