@@ -50,7 +50,7 @@ public class ProcessResultPaymentStep extends BaseStep<BankResponse, Transaction
                 .resource(new FileSystemResource(path+ File.separator+"SB"+File.separator+nameFile))
                 .linesToSkip(1)
                 .lineTokenizer(new DelimitedLineTokenizer(" "){{
-                    setNames("id","dateStart","dateFinish","code","reference","comment");
+                    setNames("dateStart","dateFinish","code","reference","comment");
                 }})
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<BankResponse>(){{
                     setTargetType(BankResponse.class);

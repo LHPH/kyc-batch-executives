@@ -1,20 +1,31 @@
 package com.kyc.batchs.payment.processor;
 
+import com.kyc.batchs.payment.entity.BankEntity;
 import com.kyc.batchs.payment.enums.BankTransactionStatusEnum;
 import com.kyc.batchs.payment.model.BankResponse;
 import com.kyc.batchs.payment.model.TransactionPayment;
+import com.kyc.batchs.payment.repository.BankRepository;
+import com.kyc.batchs.payment.repository.NativeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 
 import static com.kyc.batchs.util.DateUtil.parseStringToDate;
 
 public class PaymentItemProcessor implements ItemProcessor<BankResponse, TransactionPayment> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NativeRepository nativeRepository;
+
+    @Autowired
+    private BankRepository bankRepository;
 
     private String bank;
 
@@ -27,10 +38,12 @@ public class PaymentItemProcessor implements ItemProcessor<BankResponse, Transac
 
 
         TransactionPayment transactionPayment = new TransactionPayment();
+
+
+
         Optional<BankTransactionStatusEnum> opStatus = Optional
                 .ofNullable(BankTransactionStatusEnum.getInstance(bankResponse.getCode()));
 
-        transactionPayment.setIdTransaction(Integer.valueOf(bankResponse.getId()));
         transactionPayment.setDateStart(parseStringToDate(bankResponse.getDateStart(),"yyyyMMdd"));
         transactionPayment.setDateFinish(parseStringToDate(bankResponse.getDateFinish(),"yyyyMMdd"));
         transactionPayment.setDestination(this.bank);
@@ -38,8 +51,13 @@ public class PaymentItemProcessor implements ItemProcessor<BankResponse, Transac
         transactionPayment.setComment(bankResponse.getComment());
         transactionPayment.setIdStatus(opStatus.orElse(BankTransactionStatusEnum.FAILED).getId());
 
-        transactionPayment.setFolioPayment(null);
-        transactionPayment.setIdBank(null);
+        String reference = bankResponse.getReference();
+
+        BankEntity bank = bankRepository.getBankByCve(this.bank);
+        Long folio = nativeRepository.getFolioByReference(reference);
+
+        transactionPayment.setFolioPayment(folio);
+        transactionPayment.setIdBank(bank.getId());
 
         return transactionPayment;
     }
