@@ -1,27 +1,28 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:6000/landings
-    username: mkt
-    password: mkt
-    hikari:
-      maximum-pool-size: 1
-  jpa:
-    properties:
-      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    kyc:
+      url: jdbc:postgresql://localhost:6000/kyc_database
+      username: kyc_user
+      password: kyc_pass
+      driverClassName: org.postgresql.Driver
+      hikari:
+        maximum-pool-size: 5
+    batch:
+      url: jdbc:h2:mem:mydb
+      username: sa
+      password: sa
+      driverClassName: org.h2.Driver
 
 kyc:
   batch:
-    payments:
-      path: /home/payments
-      file: SB_PAYMENT.txt
+    executive-management:
+      path: "/home/batch/executives/executives.csv"
+      fields: operation, executive_number, first_name, second_name, last_name, second_last_name, rfc, phone, extension, email, id_branch
 
 logging:
   level:
     root: INFO
-    com.kyc: DEBUG
+    com.kyc: INFO
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE

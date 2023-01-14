@@ -3,11 +3,9 @@ spring:
     name: kyc-batchs
   profiles:
     active: dev
-  jpa:
-    open-in-view: false
   batch:
     job:
-      enabled: false
+      enabled: true
 
 logging:
   level:

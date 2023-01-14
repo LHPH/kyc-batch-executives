@@ -17,7 +17,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.batch.repeat.exception.ExceptionHandler;
-import org.springframework.data.relational.core.sql.In;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
