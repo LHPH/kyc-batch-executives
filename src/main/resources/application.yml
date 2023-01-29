@@ -6,6 +6,9 @@ spring:
   batch:
     job:
       enabled: true
+    jdbc:
+      initialize-schema: never
+      table-prefix: KYC_BATCH_
 
 logging:
   level:
