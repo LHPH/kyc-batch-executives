@@ -1,4 +1,4 @@
-package com.kyc.batch.executive.management.config;
+package com.kyc.batch.executive.management.config.steps;
 
 import com.kyc.batch.executive.management.classifier.UserExecutiveClassifier;
 import com.kyc.batch.executive.management.entity.KycExecutive;
@@ -9,6 +9,7 @@ import com.kyc.batch.executive.management.repository.KycUserRepository;
 import com.kyc.batch.executive.management.writer.UpdatingUserItemWriter;
 import com.kyc.batch.executive.management.writer.RegistrationUserItemWriter;
 import com.kyc.core.batch.BatchStepListener;
+import com.kyc.core.exception.handlers.KycBatchExceptionHandler;
 import com.kyc.core.services.PasswordEncoderService;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.ADM_USERS_STEP;
+
 @Configuration
 public class UserStepConfig {
 
@@ -34,19 +37,20 @@ public class UserStepConfig {
     @Autowired
     private KycUserRepository kycUserRepository;
 
-    private static final String STEP_NAME = "KYC-BATCH-EXECUTIVE-STEP-MNG-USERS";
+    @Autowired
+    private KycBatchExceptionHandler exceptionHandler;
 
     @Bean
     public Step userManagementStep(){
 
         return stepBuilderFactory
-                .get("userManagementStep")
+                .get(ADM_USERS_STEP)
                 .listener(userBatchStepListener())
                 .<KycExecutive, ProcessExecutiveRecord>chunk(10)
                 .reader(databaseExecutiveItemReader())
                 .processor(userExecutiveItemProcessor())
                 .writer(classifierCompositeItemWriter())
-                .faultTolerant()
+                .exceptionHandler(exceptionHandler)
                 .build();
     }
 
@@ -92,6 +96,6 @@ public class UserStepConfig {
 
     @Bean
     public BatchStepListener<KycExecutive, ProcessExecutiveRecord> userBatchStepListener(){
-        return new BatchStepListener<>(STEP_NAME);
+        return new BatchStepListener<>(ADM_USERS_STEP);
     }
 }

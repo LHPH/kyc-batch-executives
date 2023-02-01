@@ -56,11 +56,11 @@ public class KycExecutive implements Serializable {
     private Boolean status;
 
     @Column(name ="DATE_CREATION")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
     @Column(name ="DATE_UPDATED")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
 
     @Column(name = "ID_USER")

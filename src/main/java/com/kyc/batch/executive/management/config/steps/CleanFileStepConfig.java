@@ -1,4 +1,4 @@
-package com.kyc.batch.executive.management.config;
+package com.kyc.batch.executive.management.config.steps;
 
 import com.kyc.batch.executive.management.tasklets.FileDeleteTasklet;
 import org.springframework.batch.core.Step;
@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
+import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.CLEAN_FILE_TASK;
+
 @Configuration
 public class CleanFileStepConfig {
 
@@ -19,12 +21,10 @@ public class CleanFileStepConfig {
     @Value("${kyc.batch.executive-management.path}")
     private String filePath;
 
-    private static final String TASKLET_NAME = "KYC-BATCH-EXECUTIVE-TASK-CLEAN-FILE";
-
     @Bean
     public Step cleanFileStep(){
 
-        return stepBuilderFactory.get(TASKLET_NAME)
+        return stepBuilderFactory.get(CLEAN_FILE_TASK)
                 .tasklet(fileDeleteTasklet())
                 .build();
     }

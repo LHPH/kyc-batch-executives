@@ -1,6 +1,6 @@
 spring:
   application:
-    name: kyc-batchs
+    name: kyc-batch-executives
   profiles:
     active: dev
   batch:
@@ -18,3 +18,14 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
 
+kyc-messages:
+  catalog:
+    messages:
+      "001":
+        code: KYC-BATCH-EXECUTIVES-001
+        message: Unexpected Error
+        type: ERROR
+      "002":
+        code: KYC-BATCH-EXECUTIVES-002
+        message: The file content is invalid
+        type: ERROR

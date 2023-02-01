@@ -1,4 +1,4 @@
-package com.kyc.batch.executive.management.config;
+package com.kyc.batch.executive.management.config.steps;
 
 import com.kyc.batch.executive.management.entity.KycExecutive;
 import com.kyc.batch.executive.management.mappers.ExecutiveMapper;
@@ -8,6 +8,8 @@ import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 import com.kyc.batch.executive.management.validator.ExecutiveRecordValidator;
 import com.kyc.core.batch.BatchStepListener;
 import com.kyc.core.batch.BatchValidatingItemProcessor;
+import com.kyc.core.exception.handlers.KycBatchExceptionHandler;
+import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -24,6 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import javax.persistence.EntityManagerFactory;
 import java.util.Arrays;
+
+import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.ADM_EXECUTIVE_STEP;
 
 @Configuration
 public class ExecutiveStepConfig {
@@ -46,17 +50,22 @@ public class ExecutiveStepConfig {
     @Autowired
     private KycExecutiveRepository kycExecutiveRepository;
 
-    private static final String STEP_NAME = "KYC-BATCH-EXECUTIVE-STEP-MNG-EXECUTIVES";
+    @Autowired
+    private KycBatchExceptionHandler exceptionHandler;
+
+    @Autowired
+    private KycMessages kycMessages;
 
     @Bean
     public Step executiveManagementStep(){
         return stepBuilderFactory
-                .get(STEP_NAME)
+                .get(ADM_EXECUTIVE_STEP)
                 .listener(executiveBatchStepListener())
                 .<ExecutiveRawData, KycExecutive>chunk(10)
                 .reader(fileExecutiveItemReader())
                 .processor(compositeItemProcessor())
                 .writer(databaseExecutiveItemWriter())
+                .exceptionHandler(exceptionHandler)
                 .build();
     }
 
@@ -94,7 +103,7 @@ public class ExecutiveStepConfig {
     @Bean
     public Validator<ExecutiveRawData> executiveRecordValidator(){
 
-        return new ExecutiveRecordValidator(kycExecutiveRepository,validationRuleEngine());
+        return new ExecutiveRecordValidator(kycExecutiveRepository,validationRuleEngine(),kycMessages);
     }
 
     @Bean
@@ -116,7 +125,6 @@ public class ExecutiveStepConfig {
 
     @Bean
     public BatchStepListener<ExecutiveRawData, KycExecutive> executiveBatchStepListener(){
-        return new BatchStepListener<>(STEP_NAME);
+        return new BatchStepListener<>(ADM_EXECUTIVE_STEP);
     }
-
 }

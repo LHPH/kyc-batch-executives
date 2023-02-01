@@ -25,4 +25,5 @@ logging:
     com.kyc: INFO
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: INFO
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.batch.item.data: DEBUG

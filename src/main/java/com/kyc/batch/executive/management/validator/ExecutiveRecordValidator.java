@@ -7,6 +7,7 @@ import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 import com.kyc.core.enums.MessageType;
 import com.kyc.core.exception.KycBatchException;
 import com.kyc.core.model.web.MessageData;
+import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import com.kyc.core.validation.model.InputData;
 import com.kyc.core.validation.model.ResultValidation;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.ADM_EXECUTIVE_STEP;
 import static com.kyc.core.constants.RegExConstants.REGEX_NAME;
 import static com.kyc.core.constants.RegExConstants.REGEX_NUMERICS;
 import static com.kyc.core.constants.RegExConstants.REGEX_PHONES;
@@ -37,6 +39,7 @@ public class ExecutiveRecordValidator implements Validator<ExecutiveRawData> {
 
     private final KycExecutiveRepository kycExecutiveRepository;
     private final ValidationRuleEngine validationRuleEngine;
+    private final KycMessages kycMessages;
 
     private final Map<String,RuleValidation<?>> rules;
     
@@ -51,10 +54,12 @@ public class ExecutiveRecordValidator implements Validator<ExecutiveRawData> {
     private static final String ID_BRANCH = "idBranch";
 
     public ExecutiveRecordValidator(KycExecutiveRepository kycExecutiveRepository,
-                                    ValidationRuleEngine validationRuleEngine){
+                                    ValidationRuleEngine validationRuleEngine,
+                                    KycMessages kycMessages){
 
         this.kycExecutiveRepository = kycExecutiveRepository;
         this.validationRuleEngine = validationRuleEngine;
+        this.kycMessages = kycMessages;
 
         rules = new HashMap<>();
 
@@ -90,10 +95,12 @@ public class ExecutiveRecordValidator implements Validator<ExecutiveRawData> {
                 addExecutiveNumberValidation(results,executiveNumber);
                 break;
             default:
+                MessageData messageData = kycMessages.getMessage("001");
+                messageData.setMessage("Invalid Value: "+operation);
                 throw KycBatchException.builderBatchException()
-                        .batchStepName("KYC-BATCH-EXECUTIVE-STEP-MNG-EXECUTIVES")
+                        .batchStepName(ADM_EXECUTIVE_STEP)
                         .inputData(value)
-                        .errorData(new MessageData("001","Invalid Value: "+operation,MessageType.ERROR))
+                        .errorData(messageData)
                         .exitStatus(ExitStatus.FAILED)
                         .build();
         }
@@ -103,11 +110,13 @@ public class ExecutiveRecordValidator implements Validator<ExecutiveRawData> {
 
             ResultValidation resultValidation = opResult.get();
             String message = "Field: "+resultValidation.getField()+", error: "+resultValidation.getError();
+            MessageData messageData = kycMessages.getMessage("001");
+            messageData.setMessage(message);
 
             throw KycBatchException.builderBatchException()
-                    .batchStepName("KYC-BATCH-EXECUTIVE-STEP-MNG-EXECUTIVES")
+                    .batchStepName(ADM_EXECUTIVE_STEP)
                     .inputData(value)
-                    .errorData(new MessageData("002",message, MessageType.ERROR))
+                    .errorData(messageData)
                     .exitStatus(ExitStatus.FAILED)
                     .build();
         }

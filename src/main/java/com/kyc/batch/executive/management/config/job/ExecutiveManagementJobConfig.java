@@ -1,4 +1,4 @@
-package com.kyc.batch.executive.management.config;
+package com.kyc.batch.executive.management.config.job;
 
 import com.kyc.core.batch.BatchJobExecutionListener;
 import org.springframework.batch.core.Job;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.JOB_NAME;
+
 @Configuration
-public class KycExecutiveManagementBatchConfig {
+public class ExecutiveManagementJobConfig {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
-
-    private static final String JOB_NAME = "KYC-BATCH-EXECUTIVE-JOB-MNG";
 
     @Bean
     public Job executiveManagementJob(Step executiveManagementStep, Step userManagementStep, Step cleanFileStep){
@@ -23,8 +23,8 @@ public class KycExecutiveManagementBatchConfig {
                 .incrementer(new RunIdIncrementer())
                 .listener(executiveJobManagementListener())
                 .start(executiveManagementStep)
-               // .next(cleanFileStep)
-                //.next(userManagementStep)
+                .next(userManagementStep)
+                .next(cleanFileStep)
                 .build();
     }
 

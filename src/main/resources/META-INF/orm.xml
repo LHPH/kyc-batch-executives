@@ -8,7 +8,8 @@
         <query>
             from KycExecutive e
             where e.batchOperationControl in (0,2,3)
-            and (e.creationDate = CURRENT_DATE or e.updatedDate = CURRENT_DATE)
+            and (date(e.creationDate) = CURRENT_DATE or date(e.updatedDate) = CURRENT_DATE)
+            order by e.id asc
         </query>
     </named-query>
 
