@@ -9,7 +9,6 @@ import org.springframework.classify.Classifier;
 @AllArgsConstructor
 public class UserExecutiveClassifier implements Classifier<ProcessExecutiveRecord, ItemWriter<ProcessExecutiveRecord>> {
 
-
     private ItemWriter<ProcessExecutiveRecord> registerUserItemWriter;
     private ItemWriter<ProcessExecutiveRecord> updatingUserItemWriter;
 

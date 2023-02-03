@@ -46,7 +46,7 @@ public class FileDeleteTasklet implements Tasklet, InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() throws IllegalArgumentException {
         Assert.notNull(resource,"Resource must not null");
     }
 }
