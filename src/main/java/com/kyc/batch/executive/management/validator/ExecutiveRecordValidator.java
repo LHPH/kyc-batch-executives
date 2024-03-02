@@ -6,7 +6,7 @@ import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 
 import com.kyc.core.enums.MessageType;
 import com.kyc.core.exception.KycBatchException;
-import com.kyc.core.model.web.MessageData;
+import com.kyc.core.model.MessageData;
 import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import com.kyc.core.validation.model.InputData;

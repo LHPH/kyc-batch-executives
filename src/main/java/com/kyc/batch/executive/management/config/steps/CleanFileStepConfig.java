@@ -1,6 +1,6 @@
 package com.kyc.batch.executive.management.config.steps;
 
-import com.kyc.batch.executive.management.tasklets.FileDeleteTasklet;
+import com.kyc.core.batch.tasklets.CleanFilesTasklet;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 
 import static com.kyc.batch.executive.management.constants.KycBatchExecutiveConstants.CLEAN_FILE_TASK;
 
@@ -25,12 +24,12 @@ public class CleanFileStepConfig {
     public Step cleanFileStep(){
 
         return stepBuilderFactory.get(CLEAN_FILE_TASK)
-                .tasklet(fileDeleteTasklet())
+                .tasklet(cleanFileTasklet())
                 .build();
     }
 
     @Bean
-    public Tasklet fileDeleteTasklet(){
-        return new FileDeleteTasklet(new FileSystemResource(filePath));
+    public Tasklet cleanFileTasklet(){
+        return new CleanFilesTasklet(CLEAN_FILE_TASK,filePath);
     }
 }

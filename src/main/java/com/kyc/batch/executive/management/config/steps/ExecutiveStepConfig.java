@@ -42,6 +42,9 @@ public class ExecutiveStepConfig {
     private String filePath;
 
     @Value("${kyc.batch.executive-management.fields}")
+    private Integer chunkSize;
+
+    @Value("${kyc.batch.executive-management.fields}")
     private String fields;
 
     @Autowired
@@ -61,7 +64,7 @@ public class ExecutiveStepConfig {
         return stepBuilderFactory
                 .get(ADM_EXECUTIVE_STEP)
                 .listener(executiveBatchStepListener())
-                .<ExecutiveRawData, KycExecutive>chunk(10)
+                .<ExecutiveRawData, KycExecutive>chunk(chunkSize)
                 .reader(fileExecutiveItemReader())
                 .processor(compositeItemProcessor())
                 .writer(databaseExecutiveItemWriter())
@@ -78,6 +81,7 @@ public class ExecutiveStepConfig {
                 .delimited()
                 .names(fields.split(","))
                 .linesToSkip(1)
+                .strict(false)
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<ExecutiveRawData>(){{
                     setTargetType(ExecutiveRawData.class);
                 }})

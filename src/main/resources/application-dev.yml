@@ -16,6 +16,7 @@ spring:
 kyc:
   batch:
     executive-management:
+      chunk: 10
       path: "/home/batch/executives/executives.csv"
       fields: operation, executive_number, first_name, second_name, last_name, second_last_name, rfc, phone, extension, email, id_branch
 

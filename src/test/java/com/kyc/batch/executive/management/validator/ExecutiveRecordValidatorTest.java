@@ -5,7 +5,7 @@ import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.model.ExecutiveRawData;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 import com.kyc.core.exception.KycBatchException;
-import com.kyc.core.model.web.MessageData;
+import com.kyc.core.model.MessageData;
 import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import org.junit.jupiter.api.Assertions;
