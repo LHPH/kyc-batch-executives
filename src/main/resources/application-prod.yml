@@ -5,7 +5,7 @@ spring:
     password: ${kyc.config.database.postgresql.secret}
     driverClassName: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
+      maximum-pool-size: 5
   jpa:
     properties:
       hibernate:
