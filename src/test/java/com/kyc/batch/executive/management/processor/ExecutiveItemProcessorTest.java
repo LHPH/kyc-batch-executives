@@ -5,14 +5,11 @@ import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.mappers.ExecutiveMapper;
 import com.kyc.batch.executive.management.model.ExecutiveRawData;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,11 +29,6 @@ public class ExecutiveItemProcessorTest {
 
     @InjectMocks
     private ExecutiveItemProcessor executiveItemProcessor;
-
-    @BeforeAll
-    public static void init(){
-        MockitoAnnotations.openMocks(ExecutiveItemProcessor.class);
-    }
 
     @Test
     public void process_registeringExecutive_returnEntityToRegister(){

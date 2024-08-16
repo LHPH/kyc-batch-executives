@@ -1,10 +1,10 @@
 package com.kyc.batch.executive.management.writer;
 
 import com.kyc.batch.executive.management.entity.KycExecutive;
-import com.kyc.batch.executive.management.entity.KycUser;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
-import com.kyc.batch.executive.management.repository.KycUserRepository;
+import com.kyc.core.persistence.entity.KycUser;
+import com.kyc.core.persistence.repositories.KycUserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.batch.item.Chunk;
 
 import java.util.Collections;
 
@@ -47,7 +48,7 @@ public class RegistrationUserItemWriterTest {
         given(kycUserRepository.save(any(KycUser.class)))
                 .willReturn(new KycUser());
 
-        registrationUserItemWriter.write(Collections.singletonList(record));
+        registrationUserItemWriter.write(new Chunk<>(Collections.singletonList(record)));
         verify(kycExecutiveRepository,times(1)).saveAndFlush(any(KycExecutive.class));
     }
 }

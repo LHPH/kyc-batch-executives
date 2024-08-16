@@ -1,10 +1,10 @@
 package com.kyc.batch.executive.management.processor;
 
 import com.kyc.batch.executive.management.entity.KycExecutive;
-import com.kyc.batch.executive.management.entity.KycUser;
 import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
-import com.kyc.batch.executive.management.repository.KycUserRepository;
+import com.kyc.core.persistence.entity.KycUser;
+import com.kyc.core.persistence.repositories.KycUserRepository;
 import com.kyc.core.services.PasswordEncoderService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

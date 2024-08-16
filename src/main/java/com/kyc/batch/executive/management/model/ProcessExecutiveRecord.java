@@ -1,8 +1,8 @@
 package com.kyc.batch.executive.management.model;
 
 import com.kyc.batch.executive.management.entity.KycExecutive;
-import com.kyc.batch.executive.management.entity.KycUser;
 import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
+import com.kyc.core.persistence.entity.KycUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

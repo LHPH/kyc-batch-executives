@@ -3,8 +3,6 @@ package com.kyc.batch.executive.management.validator;
 import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.model.ExecutiveRawData;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
-
-import com.kyc.core.enums.MessageType;
 import com.kyc.core.exception.KycBatchException;
 import com.kyc.core.model.MessageData;
 import com.kyc.core.properties.KycMessages;

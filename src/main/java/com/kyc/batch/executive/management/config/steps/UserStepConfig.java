@@ -5,20 +5,22 @@ import com.kyc.batch.executive.management.entity.KycExecutive;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
 import com.kyc.batch.executive.management.processor.UserItemProcessor;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
-import com.kyc.batch.executive.management.repository.KycUserRepository;
-import com.kyc.batch.executive.management.writer.UpdatingUserItemWriter;
 import com.kyc.batch.executive.management.writer.RegistrationUserItemWriter;
+import com.kyc.batch.executive.management.writer.UpdatingUserItemWriter;
 import com.kyc.core.batch.BatchStepListener;
 import com.kyc.core.exception.handlers.KycBatchExceptionHandler;
+import com.kyc.core.persistence.repositories.KycUserRepository;
 import com.kyc.core.services.PasswordEncoderService;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +29,6 @@ import static com.kyc.batch.executive.management.constants.KycBatchExecutiveCons
 
 @Configuration
 public class UserStepConfig {
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
     private KycExecutiveRepository kycExecutiveRepository;
@@ -41,12 +40,12 @@ public class UserStepConfig {
     private KycBatchExceptionHandler exceptionHandler;
 
     @Bean
-    public Step userManagementStep(){
+    public Step userManagementStep(JobRepository jobRepository,
+                                   PlatformTransactionManager platformTransactionManager){
 
-        return stepBuilderFactory
-                .get(ADM_USERS_STEP)
+        return new StepBuilder(ADM_USERS_STEP,jobRepository)
                 .listener(userBatchStepListener())
-                .<KycExecutive, ProcessExecutiveRecord>chunk(10)
+                .<KycExecutive, ProcessExecutiveRecord>chunk(10,platformTransactionManager)
                 .reader(databaseExecutiveItemReader())
                 .processor(userExecutiveItemProcessor())
                 .writer(classifierCompositeItemWriter())

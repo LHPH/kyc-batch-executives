@@ -1,10 +1,12 @@
 package com.kyc.batch.executive.management.processor;
 
 import com.kyc.batch.executive.management.entity.KycExecutive;
-import com.kyc.batch.executive.management.entity.KycUser;
 import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
-import com.kyc.batch.executive.management.repository.KycUserRepository;
+import com.kyc.core.enums.KycUserTypeEnum;
+import com.kyc.core.persistence.entity.KycUser;
+import com.kyc.core.persistence.entity.KycUserType;
+import com.kyc.core.persistence.repositories.KycUserRepository;
 import com.kyc.core.services.PasswordEncoderService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +40,11 @@ public class UserItemProcessor implements ItemProcessor<KycExecutive, ProcessExe
                 kycUser.setSecret(passwordEncoderService.encode("P4sW$Ord"));
                 kycUser.setActive(true);
                 kycUser.setLocked(false);
-                kycUser.setUserType(2);
+
+                KycUserType userType = new KycUserType();
+                userType.setId(KycUserTypeEnum.EXECUTIVE.getId().longValue());
+
+                kycUser.setUserType(userType);
                 kycUser.setDateCreation(new Date());
 
                 wrapper.setOperation(BatchExecutiveProcessEnum.REGISTRATION);
