@@ -7,12 +7,10 @@ import com.kyc.core.persistence.entity.KycUser;
 import com.kyc.core.persistence.repositories.KycUserRepository;
 import com.kyc.core.services.PasswordEncoderService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -30,10 +28,6 @@ public class UserItemProcessorTest {
     @InjectMocks
     private UserItemProcessor userItemProcessor;
 
-    @BeforeAll
-    public static void init(){
-        MockitoAnnotations.openMocks(UserItemProcessorTest.class);
-    }
 
     @Test
     public void process_processingRegistration_returnEntityToRegister(){

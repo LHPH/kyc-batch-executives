@@ -3,8 +3,8 @@ package com.kyc.batch.executive.management.writer;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
 import com.kyc.core.persistence.repositories.KycUserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 
 import java.util.List;
 

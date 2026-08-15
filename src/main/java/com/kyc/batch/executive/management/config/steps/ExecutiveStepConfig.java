@@ -12,15 +12,15 @@ import com.kyc.core.exception.handlers.KycBatchExceptionHandler;
 import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import jakarta.persistence.EntityManagerFactory;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.support.CompositeItemProcessor;
-import org.springframework.batch.item.validator.Validator;
+import org.springframework.batch.infrastructure.item.database.JpaItemWriter;
+import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
+import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.infrastructure.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.infrastructure.item.support.CompositeItemProcessor;
+import org.springframework.batch.infrastructure.item.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -54,9 +54,6 @@ public class ExecutiveStepConfig {
     private KycExecutiveRepository kycExecutiveRepository;
 
     @Autowired
-    private KycBatchExceptionHandler exceptionHandler;
-
-    @Autowired
     private KycMessages kycMessages;
 
     @Bean
@@ -64,11 +61,11 @@ public class ExecutiveStepConfig {
                                         PlatformTransactionManager platformTransactionManager){
         return new StepBuilder(ADM_EXECUTIVE_STEP,jobRepository)
                 .listener(executiveBatchStepListener())
-                .<ExecutiveRawData, KycExecutive>chunk(chunkSize,platformTransactionManager)
+                .<ExecutiveRawData, KycExecutive>chunk(chunkSize)
                 .reader(fileExecutiveItemReader())
                 .processor(compositeItemProcessor())
                 .writer(databaseExecutiveItemWriter())
-                .exceptionHandler(exceptionHandler)
+                .transactionManager(platformTransactionManager)
                 .build();
     }
 
@@ -122,13 +119,11 @@ public class ExecutiveStepConfig {
 
     @Bean
     public JpaItemWriter<KycExecutive> databaseExecutiveItemWriter(){
-        JpaItemWriter<KycExecutive> jpaItemWriter = new JpaItemWriter<>();
-        jpaItemWriter.setEntityManagerFactory(emf);
-        return jpaItemWriter;
+        return new JpaItemWriter<>(emf);
     }
 
     @Bean
     public BatchStepListener<ExecutiveRawData, KycExecutive> executiveBatchStepListener(){
-        return new BatchStepListener<>(ADM_EXECUTIVE_STEP);
+        return new BatchStepListener<>(ADM_EXECUTIVE_STEP,kycMessages.getMessage("001"));
     }
 }

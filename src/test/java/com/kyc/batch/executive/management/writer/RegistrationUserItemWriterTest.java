@@ -5,14 +5,12 @@ import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
 import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 import com.kyc.core.persistence.entity.KycUser;
 import com.kyc.core.persistence.repositories.KycUserRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.batch.item.Chunk;
+import org.springframework.batch.infrastructure.item.Chunk;
 
 import java.util.Collections;
 
@@ -32,11 +30,6 @@ public class RegistrationUserItemWriterTest {
 
     @InjectMocks
     private RegistrationUserItemWriter registrationUserItemWriter;
-
-    @BeforeAll
-    public static void init(){
-        MockitoAnnotations.openMocks(RegistrationUserItemWriterTest.class);
-    }
 
     @Test
     public void write_writingRecords_recordsWereSaved(){

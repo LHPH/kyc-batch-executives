@@ -9,12 +9,10 @@ import com.kyc.core.model.MessageData;
 import com.kyc.core.properties.KycMessages;
 import com.kyc.core.validation.engine.ValidationRuleEngine;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -38,11 +36,6 @@ public class ExecutiveRecordValidatorTest {
 
     @InjectMocks
     private ExecutiveRecordValidator validator;
-
-    @BeforeAll
-    public static void init(){
-        MockitoAnnotations.openMocks(ExecutiveRecordValidatorTest.class);
-    }
 
     @Test
     public void validate_validatingRegistrationData_successfulValidation(){

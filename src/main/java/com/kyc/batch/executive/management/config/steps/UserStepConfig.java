@@ -8,14 +8,14 @@ import com.kyc.batch.executive.management.repository.KycExecutiveRepository;
 import com.kyc.batch.executive.management.writer.RegistrationUserItemWriter;
 import com.kyc.batch.executive.management.writer.UpdatingUserItemWriter;
 import com.kyc.core.batch.BatchStepListener;
-import com.kyc.core.exception.handlers.KycBatchExceptionHandler;
 import com.kyc.core.persistence.repositories.KycUserRepository;
+import com.kyc.core.properties.KycMessages;
 import com.kyc.core.services.PasswordEncoderService;
-import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.data.RepositoryItemReader;
-import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
+import org.springframework.batch.infrastructure.item.data.RepositoryItemReader;
+import org.springframework.batch.infrastructure.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,33 +36,31 @@ public class UserStepConfig {
     @Autowired
     private KycUserRepository kycUserRepository;
 
-    @Autowired
-    private KycBatchExceptionHandler exceptionHandler;
-
     @Bean
     public Step userManagementStep(JobRepository jobRepository,
-                                   PlatformTransactionManager platformTransactionManager){
+                                   PlatformTransactionManager platformTransactionManager,
+                                   KycMessages kycMessages){
 
         return new StepBuilder(ADM_USERS_STEP,jobRepository)
-                .listener(userBatchStepListener())
-                .<KycExecutive, ProcessExecutiveRecord>chunk(10,platformTransactionManager)
+                .listener(userBatchStepListener(kycMessages))
+                .<KycExecutive, ProcessExecutiveRecord>chunk(10)
                 .reader(databaseExecutiveItemReader())
                 .processor(userExecutiveItemProcessor())
                 .writer(classifierCompositeItemWriter())
-                .exceptionHandler(exceptionHandler)
+                .transactionManager(platformTransactionManager)
                 .build();
     }
 
     @Bean
     public RepositoryItemReader<KycExecutive> databaseExecutiveItemReader(){
 
-        RepositoryItemReader<KycExecutive> reader = new RepositoryItemReader<>();
-        reader.setPageSize(10);
-        reader.setRepository(kycExecutiveRepository);
-        reader.setMethodName("getExecutivesToProcess");
         Map<String, Sort.Direction> sorts = new HashMap<>();
         sorts.put("id", Sort.Direction.ASC);
-        reader.setSort(sorts);
+
+        RepositoryItemReader<KycExecutive> reader = new RepositoryItemReader<>(kycExecutiveRepository,sorts);
+        reader.setPageSize(10);
+        reader.setMethodName("getExecutivesToProcess");
+
         return reader;
     }
 
@@ -94,7 +92,7 @@ public class UserStepConfig {
     }
 
     @Bean
-    public BatchStepListener<KycExecutive, ProcessExecutiveRecord> userBatchStepListener(){
-        return new BatchStepListener<>(ADM_USERS_STEP);
+    public BatchStepListener<KycExecutive, ProcessExecutiveRecord> userBatchStepListener(KycMessages kycMessages){
+        return new BatchStepListener<>(ADM_USERS_STEP,kycMessages.getMessage("001"));
     }
 }

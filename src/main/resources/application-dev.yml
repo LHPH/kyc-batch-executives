@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:6000/kyc_database
+    url: jdbc:postgresql://localhost:5432/kyc_database
     username: kyc_user
     password: kyc_pass
     driverClassName: org.postgresql.Driver
@@ -17,7 +17,7 @@ kyc:
   batch:
     executive-management:
       chunk: 10
-      path: "/home/batch/executives/executives.csv"
+      path: "/home/kyc/batch/executives/executives.csv"
       fields: operation, executive_number, first_name, second_name, last_name, second_last_name, rfc, phone, extension, email, id_branch
 
 logging:

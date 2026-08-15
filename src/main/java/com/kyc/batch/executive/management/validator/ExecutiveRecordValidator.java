@@ -15,8 +15,8 @@ import com.kyc.core.validation.rules.NonNullRuleValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.item.validator.ValidationException;
-import org.springframework.batch.item.validator.Validator;
+import org.springframework.batch.infrastructure.item.validator.ValidationException;
+import org.springframework.batch.infrastructure.item.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;

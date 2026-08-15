@@ -3,7 +3,7 @@ package com.kyc.batch.executive.management.classifier;
 import com.kyc.batch.executive.management.enums.BatchExecutiveProcessEnum;
 import com.kyc.batch.executive.management.model.ProcessExecutiveRecord;
 import lombok.AllArgsConstructor;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.classify.Classifier;
 
 @AllArgsConstructor
